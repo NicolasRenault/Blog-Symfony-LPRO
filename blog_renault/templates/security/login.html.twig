@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block h1_content %}<h1>{{ 'Connexion'|trans }}</h1>{% endblock %}
+{% block account_nav_item %}{% endblock %}
+{% block content_log %}
+    <section class="border p-4 d-flex justify-content-center mb-4">
+        {% if error %}
+            <div>{{ error.messageKey }}</div>
+        {% endif %}
+        <form action="{{ path('security_login_check') }}" method="post">
+            <div class="form-outline mb-4">
+                <label class="form-label">{{ 'Nom'|trans }} :</label>
+                <input class="form-control" ype="text" id="username" name="_username" placeholder="{{ 'Nom'|trans }}"/>
+            </div>
+
+            <div class="form-outline mb-4">
+                <label class="form-label" >{{ 'Mot de passe'|trans }} :</label>
+                <input class="form-control" type="password" id="password" name="_password" placeholder="{{ 'Mot de passe'|trans }}"/>
+            </div>
+
+            <button type="submit" class="btn btn-elegant btn-block">{{ 'Se connecter'|trans }}</button>
+        </form>
+    <section>
+{% endblock %}
+

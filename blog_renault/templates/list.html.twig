@@ -1,0 +1,45 @@
+{% extends 'blog.html.twig' %}
+
+{% block h1_content %}<h1>{% if category is defined %} {{ 'Catégorie'|trans }} : {{category.name|trans }} {% else %} {{"Liste d'articles"|trans }} {% endif %}</h1>{% endblock %}
+    
+{% block menu_nav_item %}
+    {{ parent() }}
+    {% if category is defined %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+                <a class="nav-link waves-effect waves-light" href="{{ path('action_delete_category' , {'categoryId' : category.id } ) }}">{{'Supprimer catégorie'|trans }}</a>
+            </li>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block blog_content %}
+
+    {% include 'pagination.html.twig' %}
+
+    {% if articles is defined %}
+        {% for article in articles %}
+            {% if article.published == false %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <p><i class="far fa-newspaper"></i> {{ article.title }} {{ article.published ?  "" : '  <i class="fas fa-times red-text"></i>'}}
+                        <a class="btn btn-elegant float-right  {{ article.published ? : 'disabled'}} " href="{{ path( 'action_view', {'articleId' : article.id} ) }}">{{'Visualiser'|trans }}</a>
+                    </p>
+                    {% if loop.index != loop.last %}<hr class="w-100">{% endif %}
+                    <br />                    
+                {% endif %}
+            {% else %}
+                <p><i class="far fa-newspaper"></i> {{ article.title }} {{ article.published ?  "" : '  <i class="fas fa-times red-text"></i>'}}
+                    <a class="btn btn-elegant float-right" href="{{ path( 'action_view', {'articleId' : article.id} ) }}">{{'Visualiser'|trans }}</a>
+                </p>
+                {% if loop.index != loop.last %}<hr class="w-100">{% endif %}
+                <br />
+            {% endif %}
+                
+        {% endfor %}
+    {% elseif message is defined %}
+        <p> {{message}} </p>
+    {% endif %}
+
+    {% include 'pagination.html.twig' %}
+
+{% endblock %}

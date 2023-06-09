@@ -1,0 +1,38 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext #auto -> ne fonctionne pas pour moi
+        App\Entity\User : auto
+    
+    providers:
+        memory_provider :
+            memory:
+                users:
+                    user:
+                        password: user
+                        roles: ROLE_USER
+                    root:
+                        password: root
+                        roles: ROLE_ADMIN
+        entity_provider :
+            entity:
+                class: 'App\Entity\User'
+                property: 'username'
+
+
+    firewalls:
+        main:
+            pattern: ^/
+            http_basic: ~
+            anonymous: true
+            lazy: true
+            provider: memory_provider
+            form_login:
+                check_path: security_login_check
+                login_path: security_login
+
+            logout:
+                path: security_logout
+                target: index

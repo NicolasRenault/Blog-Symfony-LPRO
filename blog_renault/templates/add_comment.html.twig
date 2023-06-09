@@ -1,0 +1,13 @@
+{% extends 'blog.html.twig' %}
+{% block h1_content %}<h1>{{ "Ajout de commentaire"|trans }}</h1>{% endblock %}
+{% block blog_content %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_end(form) }}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('#comment_send').removeClass("btn-default").addClass("btn-elegant");
+        })
+    </script>
+{% endblock %}

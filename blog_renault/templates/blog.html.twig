@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Le {{ parent() }} {% endblock %}
+{% block h1_content %}<h1>{{ 'Bienvenue sur le blog'|trans }} !</h1>{% endblock %}
+{% block menu_nav_item %}
+    {{ parent() }}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light"href="{{ path('action_add') }}">{{ 'Ajouter article'|trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light"href="{{ path('action_add_category') }}">{{ 'Ajouter catégorie'|trans }}</a>
+        </li>        
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% block blog_content %}
+    {% endblock %}
+    <br>
+    <br>
+    <div class="fixed-bottom text-center elegant-color-dark text-white">
+        <h2>{{ "Un blog d'actus"|trans }} | Nicolas Renault</h2>
+    </div>
+{% endblock %}

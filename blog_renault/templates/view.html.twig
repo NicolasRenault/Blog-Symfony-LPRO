@@ -1,0 +1,57 @@
+{% extends 'blog.html.twig' %}
+
+{% block h1_content %}<h1>{{ "Article"|trans }}</h1>{% endblock %}
+{% block menu_nav_item %}
+    {{ parent() }}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="{{ path('action_delete' , {'articleId' : article.id } ) }}">{{'Supprimer article'|trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="{{ path('action_edit' , {'articleId' : article.id } ) }}">{{'Modifier article'|trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light"href="{{ path('action_add_comment', {'articleId' : article.id }) }}">{{ 'Ajouter commentaire'|trans }}</a>
+        </li>
+    {% endif %}
+{% endblock %}
+{% block blog_content %}
+        <ul class="list-group list-group-horizontal">
+            <b class="list-group-item blod">{{'Catégories'|trans }} :</b>
+            {% if categories %}
+                {% for category in categories %}
+                    <li class="list-group-item">{{ category.name|trans }}</li>
+                {% endfor %}
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="list-group-item"><a href="{{ path('action_article_categories', {'articleId' : article.id }) }}"><i class="fas fa-plus black-text"></i></a></li>
+            {% endif %}
+        </ul>
+        <hr>
+    
+    <p>{{'Titre'|trans }} : {{ article.title }}</p>
+    <p>{{'Slug'}} : {{ article.slug }}</p>
+    <p>{{'Contenu'|trans }} : {{ article.content }}</p>
+    <p>{{'Publié'|trans }} : {{ article.published ? "Oui"|trans : "Non"|trans}}</p>
+    <p>{{'Auteur'|trans }} : {{ article.author }}</p>
+    <p>{{'Nombre de vues'|trans }} : {{ article.nbviews }}</p>
+    
+    {% if comments %}
+        <br>
+        <hr>
+        <br>
+        <p> {{'Commentaires'|trans }} : </p>
+        <div class="list-group">
+            {% for comment in comments %}
+                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-2 h5">{{ comment.title }}</h5>
+                        <small> {{ comment.createdat|date('d/m/Y'|trans) }} {% if is_granted('ROLE_ADMIN') %} <a href="{{path('action_delete_comment', {'commentId' : comment.id })}}" title="{{'Supprimer le commantaire'|trans}}"> <i class="fas fa-times red-text"></i></a>{% endif %}</small>
+                    </div>
+                    <p class="mb-2">{{ comment.message }}</p>
+                    <small>{{'Auteur'|trans }} : {{ comment.author }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

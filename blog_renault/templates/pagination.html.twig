@@ -1,0 +1,25 @@
+{% if nbPage is defined %}
+    {% block nav_articles %}
+        <nav aria-label="Page navigation example">
+        <ul class="pagination pg-blue">
+            <li class="page-item ">
+                <a class="page-link {{ currentPage == 1 ? "disabled" }}" href="{{path('action_list' , {'page' : currentPage-1})}}"><i class="fas fa-angle-left"></i></a>
+            </li>
+            {% for page in 1..nbPage %}
+                {% if page == currentPage %}
+                    <li class="page-item active">
+                        <a class="page-link elegant-color" href="#">{{page}}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{path('action_list' , {'page' : page})}}">{{page}}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            <li class="page-item ">
+                <a class="page-link {{ currentPage == nbPage ? "disabled" }}" href="{{path('action_list' , {'page' : currentPage+1})}}"><i class="fas fa-angle-right"></i></a>
+            </li>
+        </ul>
+        </nav>
+    {% endblock %}
+{% endif %}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{{ 'Blog'|trans }}{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="{{ asset('styles/styles.css') }}">
+            <link href="{{asset('css/flag.min.css')}}" rel="stylesheet">
+        {% endblock %}
+    </head>
+    <body>
+        {% block menu_css %}
+        <nav class="navbar navbar-expand-sm sticky-top navbar-dark elegant-color-dark">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" title="{{'Cliquez sur moi'|trans}}" class="animated bounceInDown"><i class="navbar-brand fab fa-symfony"></i></a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                {% block menu_nav_item %}
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect waves-light" href="{{ path('index') }}">{{ 'Acceuil'|trans }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect waves-light" href="{{ path('action_list') }}">{{ 'Blog'|trans }}</a>
+                        </li>
+                    {% endif %}
+                {% endblock %}
+                </ul>
+                <ul class="justify-content-center navbar-nav mr-auto">   
+                    {% block h1 %}
+                        <div class="nav-item text-center elegant-color-dark text-white">
+                            {% block h1_content %}
+                                {% if (app.user != null) %}
+                                    <h1>{{ 'Bienvenue sur le site'|trans }}</h1>
+                                {% else %}
+                                    <h1>{{ 'Bienvenue, veuillez vous connecter pour accéder au site'|trans }}<h1>
+                                {% endif %}
+                            {% endblock %}
+                        </div>
+                    {% endblock %}
+                </ul>
+                <ul class="form-inline navbar-nav ">
+                {% block account_nav_item %}
+                    {% if (app.user == null) %}
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect waves-light animated flash infinite slower" href="{{ path('security_login') }}">{{'Se connecter'|trans}}</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect waves-light">{{ 'Utilisateur'|trans }} : {{ app.user.username }} | {{ 'Role'|trans }} : {% for role in app.user.roles %}{{ role }}{% endfor %}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect waves-light" href="{{ path('security_logout') }}">{{ 'Se déconnecter'|trans }}</a>
+                        </li>
+                        
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link waves-effect waves-light" title="{{"Changer de langue vers l'Anglais"|trans}}" href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'en'|trans}))}}"><i class="{{'uk'|trans}} flag"></i></a>
+                    </li>
+                {% endblock %}
+                </ul>        
+            </div>
+        </nav>
+        <br>
+        {% endblock %}
+        {% if is_granted('ROLE_USER') %}
+            <div class="container-fluid h-100 my-2">
+                <div class="row">
+                        <div class="menugauche col-4 col-sm-2 py-2 border-right">
+                            {% block menu_gauche %}
+                            {{render(controller(
+                                'App\\Controller\\ActionController::getLeftMenu',{'nbArticle':5}
+                            ))}}
+                            {% endblock %}
+                        </div>
+                    <div class ="menudroite col-8 col-sm-10">
+                        <div class="center">
+                        {% block content %}
+                        {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {% block content_log %}
+            {% endblock %}
+        {% endif %}
+        {% block javascripts %}
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+        {% endblock %}
+    </body>
+</html>

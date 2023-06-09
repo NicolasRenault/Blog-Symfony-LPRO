@@ -1,0 +1,9 @@
+{% block categories %}
+<ul class="list-group list-group-horizontal">
+            <b class="list-group-item blod">{{ 'Catégories'|trans }} :</b>
+            {% for category in categories %}
+                <li class="list-group-item">{{ category.name|trans }}</li>
+            {% endfor %}
+        </ul>
+<hr>
+{% endblock %}

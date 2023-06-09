@@ -1,0 +1,22 @@
+{% extends 'blog.html.twig' %}
+{% block h1_content %}<h1>{{ "Ajout des catégories pour l'article"|trans }} : {{articleId}}</h1>{% endblock %}
+{% block blog_content %}
+    <section class="border p-4 d-flex justify-content-center mb-4">
+        <form action="{{ path('action_article_categories_validate') }}" method="POST">
+            <input type='hidden' name="articleId" value="{{articleId}}" />
+            {% for category in categories %}
+                <div class="form-check">
+                    <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="{{ category.id }}"
+                    value="{{ category.id }}"
+                    {{category.selected}}
+                    />
+                    <label class="form-check-label"> {{category.name|trans}} </label>
+                </div>
+            {% endfor %}
+            <button class="btn btn-elegant">{{'Valider'|trans}}</button>
+        </form>
+    </section>
+{% endblock %}
